@@ -97,7 +97,7 @@ export default function OrderTable() {
     <>
       <div className="p-4">
         <div
-          style={{ background: "#fff" }}
+          style={{ background: "rgb(237 248 252)" }}
           className="flex items-center p-4 rounded-t-lg"
         >
           <Row style={{ width: "90%" }}>
@@ -111,7 +111,7 @@ export default function OrderTable() {
                     style={{
                       height: "auto",
                       width: 200,
-                      backgroundColor: isActiveTab ? "#2452db" : "#edf8fb",
+                      backgroundColor: isActiveTab ? "#2452db" : "#fff",
                       color: isActiveTab ? "#fff" : "#000",
                       textAlign: "center",
                       border: isActiveTab
@@ -160,7 +160,9 @@ export default function OrderTable() {
           </div>
         </div>
       </div>
-      <Table isRenderCheckbox={false} data={data} columns={columns} />
+      <div style={{ background: "rgb(237 248 252)" }}>
+        <Table isRenderCheckbox={false} data={data} columns={columns} />
+      </div>
     </>
   );
 }

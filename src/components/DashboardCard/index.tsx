@@ -7,7 +7,8 @@ export default function DashboardCard({ children }: { children: any }) {
     <div
       className="rounded-lg card-box-shadow"
       style={{
-        background: "rgb(237 248 252)",
+        // background: "rgb(237 248 252)",
+        background: "#fff",
         width: "100%",
         height: "100%",
       }}
