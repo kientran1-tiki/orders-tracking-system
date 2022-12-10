@@ -1,0 +1,85 @@
+.custom-table {
+  .ant-table {
+    background-color: transparent !important;
+
+    thead {
+      .ant-table-cell {
+        background-color: transparent !important;
+        font-weight: 600;
+        color: #616f89;
+        font-size: 8 !important;
+      }
+    }
+  }
+  .ant-table-tbody {
+    margin: 0 4px !important;
+    .ant-table-row {
+      margin-top: 12px;
+      margin-bottom: 12px;
+
+      cursor: pointer;
+      color: #6d7995;
+      border-radius: 4px !important;
+
+      td {
+        border-color: transparent !important;
+        border-width: 1.5px;
+        border-style: solid;
+      }
+      td:first-child {
+        border-top-left-radius: 12px !important;
+      }
+      // &:hover {
+      //   td {
+      //     border-bottom: 1.5px solid #2252da !important;
+      //     border-top: 1.5px solid #2252da !important;
+      //   }
+      //   td:first-child {
+      //     border-left: 1.5px solid #2252da !important;
+      //   }
+      //   td:last-child {
+      //     border-top-right-radius: 4px !important;
+      //     border-bottom-right-radius: 4px !important;
+      //     border-right: 1.5px solid #2252da !important;
+      //   }
+      // }
+    }
+  }
+
+  .ant-table-tbody > tr > td {
+    border-bottom: none !important;
+    transition: background 0.3s;
+  }
+  .ant-table-tbody > tr.ant-table-placeholder,
+  tr.ant-table-placeholder:hover > td {
+    background: #fff !important;
+  }
+}
+
+.custom-table .ant-table-row {
+}
+
+.ant-table table {
+  border-collapse: collapse !important;
+  border-spacing: 2 !important;
+}
+
+.ant-table-thead
+  > tr
+  > th:not(:last-child):not(.ant-table-selection-column):not(
+    .ant-table-row-expand-icon-cell
+  ):not([colspan])::before {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 0px !important;
+  height: 1.6em;
+  background-color: rgba(0, 0, 0, 0.06);
+  transform: translateY(-50%);
+  transition: background-color 0.3s;
+  content: "";
+}
+
+.ant-table-pagination.ant-pagination {
+  margin: 16px 12px !important;
+}

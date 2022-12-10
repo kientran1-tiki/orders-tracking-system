@@ -1,0 +1,14 @@
+.show-all-custom {
+  &:hover {
+    svg {
+      rect,
+      path {
+        stroke: #2252da !important;
+        color: #2252da;
+      }
+    }
+    span {
+      color: #2252da;
+    }
+  }
+}
