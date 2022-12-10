@@ -17,7 +17,7 @@ const { Sider } = Layout;
 
 export default function CustomSidebar() {
   const location = useLocation();
-  const [selectedKeys, setSelectedKeys] = useState(["dashboard"]);
+  const [selectedKeys, setSelectedKeys] = useState(["orders-tracking-system"]);
 
   useEffect(() => {
     const exactPathNameSpliced = location.pathname.split("/");
@@ -25,7 +25,7 @@ export default function CustomSidebar() {
     if (currentPath) {
       setSelectedKeys([currentPath]);
     } else {
-      setSelectedKeys(["dashboard"]);
+      setSelectedKeys(["orders-tracking-system"]);
     }
   }, [location]);
 
@@ -67,9 +67,9 @@ export default function CustomSidebar() {
             style={{
               margin: "0 12px",
             }}
-            key={"dashboard"}
+            key={"orders-tracking-system"}
           >
-            <Link to={"/"}>
+            <Link to={"/orders-tracking-system"}>
               <div className="flex justify-between">
                 <strong className="ml-2">Dashboard</strong>
                 <img alt="" style={{ width: 16 }} src={Arrows}></img>

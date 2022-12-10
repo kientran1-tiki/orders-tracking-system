@@ -7,18 +7,25 @@ import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import { Col, Input, Row } from "antd";
 import moment from "moment";
 import { useAppSelector } from "../../hooks";
-import { getOrderState } from "../../redux/orderSlice";
+import {
+  getOrderTracingStatusState,
+  getOrderState,
+} from "../../redux/orderSlice";
 import Filter from "./components/Filter";
 import { Link } from "react-router-dom";
 
 export default function Orders() {
   const [isShowFilter, setIsShowFilter] = useState(false);
   const orderState = useAppSelector(getOrderState);
+  const orderTracingStatusState = useAppSelector(getOrderTracingStatusState);
+
   const [filterOptions, setFilterOptions] = useState<any>({
     status: [],
     name_order: null,
     name_rider: null,
     merchant_name: null,
+    update_time: null,
+    order_by_timing: null,
   });
 
   const [data, setData] = useState(orderState);
@@ -41,6 +48,72 @@ export default function Orders() {
   );
 
   useEffect(() => {
+    let listWarningOrder: any = [];
+    let listLateOrder: any = [];
+    if (filterOptions.order_by_timing) {
+      const results = orderTracingStatusState.reduce(function (
+        results: any,
+        org: any
+      ) {
+        (results[org.order_id] = results[org.order_id] || []).push(org);
+        return results;
+      },
+      {});
+      let listWarning: any = [];
+      let listLate: any = [];
+      Object.keys(results).map((key: any) => {
+        const result = results[key];
+
+        result?.map((itemInResult: any, index: any) => {
+          const element = itemInResult;
+          const nextElement = result[index + 1];
+          if (nextElement) {
+            const duration = moment.duration(
+              moment(nextElement.update_time).diff(moment(element.update_time))
+            );
+            const minutes = duration.asMinutes() % 60;
+
+            if (minutes >= 30 && minutes < 40) {
+              listWarning.push({ ...element, time: minutes });
+            } else {
+              if (minutes >= 40) {
+                listLate.push({ ...element, time: minutes });
+              }
+            }
+          }
+        });
+      });
+      if (filterOptions.order_by_timing == 30 && listWarning.length) {
+        listWarningOrder = orderState
+          ?.map((order: any) => {
+            const existOrderInList = listWarning?.find(
+              (listItem: any) => order?.id == listItem?.order_id
+            );
+            if (existOrderInList) {
+              return { ...order, time: existOrderInList?.time };
+            } else {
+              return undefined;
+            }
+          })
+          .filter(Boolean);
+      } else {
+        if (filterOptions.order_by_timing == 40 && listLate.length) {
+          listLateOrder = orderState
+            ?.map((order: any) => {
+              const existOrderInList = listLate?.find(
+                (listItem: any) => order?.id == listItem?.order_id
+              );
+              if (existOrderInList) {
+                return { ...order, time: existOrderInList?.time };
+              } else {
+                return undefined;
+              }
+            })
+            .filter(Boolean);
+        }
+      }
+    }
+
     const newData = orderState
       ?.filter((item: any) => {
         if (filterOptions.status?.length === 0) {
@@ -57,7 +130,40 @@ export default function Orders() {
       })
       .filter((item: any) => filterByName(item, "name_order"))
       .filter((item: any) => filterByName(item, "name_rider"))
-      .filter((item: any) => filterByName(item, "merchant_name"));
+      .filter((item: any) => filterByName(item, "merchant_name"))
+      .filter((item: any) => {
+        if (filterOptions?.update_time) {
+          const minutes = moment().diff(moment(item.update_time), "minutes");
+          if (minutes >= 0 && minutes <= filterOptions.update_time) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return true;
+      })
+      .filter((item: any) => {
+        if (filterOptions?.order_by_timing) {
+          if (filterOptions?.order_by_timing == 40) {
+            if (
+              listLateOrder?.find((lateItem: any) => lateItem.id === item.id)
+            ) {
+              return true;
+            }
+            return false;
+          } else {
+            if (
+              listWarningOrder?.find(
+                (warningOrder: any) => warningOrder.id === item.id
+              )
+            ) {
+              return true;
+            }
+            return false;
+          }
+        }
+        return true;
+      });
     setData(newData);
   }, [filterOptions]);
 
@@ -93,19 +199,6 @@ export default function Orders() {
       sortDirections: ["descend", "ascend"],
       render: (text) => <strong style={{ color: "#000" }}>{text}</strong>,
     },
-    // {
-    //   align: "center" as AlignType,
-    //   title: "Address",
-    //   width: 150,
-    //   dataIndex: "address",
-    //   type: "selection",
-    //   isOnClickRow: false,
-    //   isResize: false,
-    //   sorter: (a: any, b: any) => {
-    //     return a?.address?.localeCompare(b?.address);
-    //   },
-    //   sortDirections: ["descend", "ascend"],
-    // },
     {
       align: "center",
       title: "Merchant",
@@ -126,14 +219,6 @@ export default function Orders() {
       ),
     },
 
-    // {
-    //   align: "center",
-    //   title: "Dishes",
-    //   width: 100,
-    //   dataIndex: "dishes",
-    //   type: "selection",
-    //   renderInSearch: true,
-    // },
     {
       align: "center",
       title: "Total price",
@@ -161,7 +246,9 @@ export default function Orders() {
         return moment(a.update_time).unix() - moment(b.update_time).unix();
       },
       sortDirections: ["descend", "ascend"],
-      render: (text) => <span>{moment(text).format("DD/MM/yyyy")}</span>,
+      render: (text) => (
+        <span>{moment(text).format("DD/MM/yyyy HH:MM:ss")}</span>
+      ),
     },
     {
       align: "center",
@@ -206,8 +293,13 @@ export default function Orders() {
               </div>
             </div>
           </div>
-
-          <Table data={data ?? []} columns={columns} />
+          <div
+            style={{
+              background: "#fff",
+            }}
+          >
+            <Table data={data ?? []} columns={columns} />
+          </div>
         </Col>
         <Col span={isShowFilter ? 24 - COL_SPAN_DEFAULT : 0}>
           <Filter

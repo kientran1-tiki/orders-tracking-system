@@ -155,8 +155,9 @@ export default function OrderTable() {
                 strokeWidth="2"
               />
             </svg>
-
-            <span className="font-semibold text-sm"> All list</span>
+            <Link to={"/orders"}>
+              <span className="font-semibold text-sm">All list</span>
+            </Link>
           </div>
         </div>
       </div>

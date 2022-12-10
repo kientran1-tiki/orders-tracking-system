@@ -70,7 +70,19 @@ export default function TotalOrder() {
       if (moment(item.update_time).isSame(month, "month")) {
         return true;
       }
+      // if (
+      //   moment(item.update_time).isSame(
+      //     moment(month)
+      //       .subtract(1, "months")
+      //       .endOf("month")
+      //       .format("YYYY-MM-DD"),
+      //     "month"
+      //   )
+      // ) {
+      //   return true;
+      // }
     });
+    console.log("newData", newData);
 
     const arrayDateInMonth = getAllDateOfMonth(month.get("month"));
     const dataChart = arrayDateInMonth?.map((dayInMonth: any) => {
@@ -78,7 +90,7 @@ export default function TotalOrder() {
         if (
           moment(pieceData.update_time).isSame(moment(dayInMonth), "date") &&
           // filter all order have status is Done
-          pieceData.status_customer === 5
+          pieceData.status_customer == 5
         ) {
           return true;
         } else {
@@ -101,7 +113,7 @@ export default function TotalOrder() {
         labels: {
           show: false,
         },
-        categories: arrayDateInMonth?.map((_, index) => index),
+        categories: arrayDateInMonth?.map((_, index) => index + 1),
       },
     });
   }, [month, orderState]);

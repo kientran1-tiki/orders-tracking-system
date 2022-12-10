@@ -75,9 +75,9 @@ export default function TotalOrder() {
         if (
           moment(pieceData.update_time).isSame(moment(dayInMonth), "date") &&
           // filter all order have status is in-process
-          (pieceData.status_customer === 2 ||
-            pieceData.status_customer === 3 ||
-            pieceData.status_customer === 4)
+          (pieceData.status_customer == 2 ||
+            pieceData.status_customer == 3 ||
+            pieceData.status_customer == 4)
         ) {
           return true;
         } else {
@@ -100,7 +100,7 @@ export default function TotalOrder() {
         labels: {
           show: false,
         },
-        categories: arrayDateInMonth?.map((_, index) => index),
+        categories: arrayDateInMonth?.map((_, index) => index + 1),
       },
     });
   }, [month, orderState]);

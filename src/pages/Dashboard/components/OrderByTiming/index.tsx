@@ -9,13 +9,14 @@ import {
 import moment from "moment";
 
 import "./styles.scss";
+import { Link } from "react-router-dom";
 
 export default function OrderByTiming() {
   const orderTracingStatusState = useAppSelector(getOrderTracingStatusState);
   const orderState = useAppSelector(getOrderState);
 
-  const [listWarning, setlistWarning] = useState([]);
-  const [listLate, setlistLate] = useState([]);
+  const [listWarning, setListWarning] = useState([]);
+  const [listLate, setListLate] = useState([]);
 
   useEffect(() => {
     const results = orderTracingStatusState.reduce(function (
@@ -30,22 +31,15 @@ export default function OrderByTiming() {
     let listLate: any = [];
     Object.keys(results).map((key: any) => {
       const result = results[key];
-      // console.log("result", result);
 
-      result?.map((itemInresult: any, index: any) => {
-        // console.log("itemInresult", itemInresult);
-
-        // for (let index = 0; index < result.length; index++) {
-        const element = itemInresult;
+      result?.map((itemInResult: any, index: any) => {
+        const element = itemInResult;
         const nextElement = result[index + 1];
-        // console.log("element", element);
-        // console.log("nextElement", nextElement);
         if (nextElement) {
           const duration = moment.duration(
             moment(nextElement.update_time).diff(moment(element.update_time))
           );
           const minutes = duration.asMinutes() % 60;
-          console.log("minutes", minutes);
 
           if (minutes >= 30 && minutes < 40) {
             listWarning.push({ ...element, time: minutes });
@@ -68,7 +62,7 @@ export default function OrderByTiming() {
           return undefined;
         }
       });
-      setlistWarning(listWarningOrder.filter(Boolean));
+      setListWarning(listWarningOrder.filter(Boolean));
     }
     if (listLate.length) {
       const listLateOrder = orderState?.map((order: any) => {
@@ -81,7 +75,7 @@ export default function OrderByTiming() {
           return undefined;
         }
       });
-      setlistLate(listLateOrder.filter(Boolean));
+      setListLate(listLateOrder.filter(Boolean));
     }
   }, [orderTracingStatusState]);
 
@@ -155,8 +149,9 @@ export default function OrderByTiming() {
               strokeWidth="2"
             />
           </svg>
-
-          <span className="font-semibold text-sm"> All list</span>
+          <Link to={"/orders"}>
+            <span className="font-semibold text-sm"> All list</span>
+          </Link>
         </div>
 
         <div className="flex justify-between mt-2">
@@ -217,8 +212,9 @@ export default function OrderByTiming() {
               strokeWidth="2"
             />
           </svg>
-
-          <span className="font-semibold text-sm"> All list</span>
+          <Link to={"/orders"}>
+            <span className="font-semibold text-sm"> All list</span>
+          </Link>
         </div>
       </div>
     </>

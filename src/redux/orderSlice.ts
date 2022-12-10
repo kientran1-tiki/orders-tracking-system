@@ -9,6 +9,7 @@ import moment from "moment";
 const initAuth: any = {
   orderList: MOCK_DATA_ORDER,
   tracingStatus: TRACING_STATUS_MOCK,
+  dishes: TRACING_STATUS_MOCK,
 };
 
 const authSlice = createSlice({
@@ -33,8 +34,10 @@ const authSlice = createSlice({
       const currentOrder = newStateOrder?.find(
         (order: any) => order.id == action?.payload?.order_id
       );
-      currentOrder.status_customer = action?.payload?.newStatus;
-
+      currentOrder.status_customer = parseInt(action?.payload?.newStatus);
+      currentOrder.update_time = moment
+        .utc(new Date())
+        .format("dd, DD MMM YYYY HH:MM:SS");
       state.orderList = newStateOrder;
     });
   },

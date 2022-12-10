@@ -1,4 +1,7 @@
 .show-all-custom {
+  span {
+    color: #dadee7 !important;
+  }
   &:hover {
     svg {
       rect,
@@ -8,7 +11,7 @@
       }
     }
     span {
-      color: #2252da;
+      color: #2252da !important;
     }
   }
 }

@@ -73,8 +73,8 @@ export default function TotalOrder() {
       const newCount = newData?.filter((pieceData: any) => {
         if (
           moment(pieceData.update_time).isSame(moment(dayInMonth), "date") &&
-          // filter all order have status is Done
-          pieceData.status_customer === 1
+          // filter all order have status is cancel
+          pieceData.status_customer == 6
         ) {
           return true;
         } else {
@@ -97,7 +97,7 @@ export default function TotalOrder() {
         labels: {
           show: false,
         },
-        categories: arrayDateInMonth?.map((_, index) => index),
+        categories: arrayDateInMonth?.map((_, index) => index + 1),
       },
     });
   }, [month, orderState]);
