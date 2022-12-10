@@ -1,7 +1,6 @@
 {
   "name": "ots",
   "version": "0.1.0",
-  "homepage": "https://kientran1-tiki.github.io/ots",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.3",
