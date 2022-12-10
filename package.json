@@ -1,6 +1,7 @@
 {
   "name": "ots",
   "version": "0.1.0",
+  "homepage": "https:/orders-tracking-systems.com",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.3",
@@ -33,6 +34,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "craco build",
+    "deploy": "gh-pages -d build",
     "start": "craco start",
     "build": "craco build",
     "test": "react-scripts test",
@@ -59,6 +62,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.191",
     "@types/redux-logger": "^3.0.9",
+    "gh-pages": "^4.0.0",
     "tailwindcss": "^3.2.4"
   }
 }
